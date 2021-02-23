@@ -1,9 +1,13 @@
-function App() {
+import { Router } from "react-router-dom";
+import { createBrowserHistory } from "history";
+import Dashboard from "./views/Dashboard";
+export default function App() {
+  const browserHistory = createBrowserHistory();
   return (
-    <div>
-      <h1>Personal Budget Management</h1>
-    </div>
+    <>
+      <Router history={browserHistory}>
+        <Dashboard />
+      </Router>
+    </>
   );
 }
-
-export default App;
