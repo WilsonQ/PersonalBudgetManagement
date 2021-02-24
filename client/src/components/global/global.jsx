@@ -6,20 +6,10 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 
 import Container from "@material-ui/core/Container";
 
-//import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import Typography from "@material-ui/core/Typography";
-
-//import Drawer from "@material-ui/core/Drawer";
-import Divider from "@material-ui/core/Divider";
-import List from "@material-ui/core/List";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-
-import { mainListItems, secondaryListItems } from "./listItem";
 import AppBar from "./AppBar";
 import Drawer from "./Drawer";
+
+import { isAuthenticated } from "../../service/auth/authentication";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -103,6 +93,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard(props) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [login, setLogin] = useState(isAuthenticated());
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -115,8 +106,18 @@ export default function Dashboard(props) {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar handleDrawerOpen={handleDrawerOpen} open={open} />
-      <Drawer handleDrawerClose={handleDrawerClose} open={open} />
+      {/* condicionar appbar 
+      cuando el usuario no esta logiado solo tiene que mostrar el appbar  con el title y los botones de login y Register
+      si esta logeado tiene que mostra el drawer y un boton de logout */}
+
+      <AppBar
+        login={login}
+        setLogin={setLogin}
+        handleDrawerOpen={handleDrawerOpen}
+        open={open}
+      />
+      {login && <Drawer handleDrawerClose={handleDrawerClose} open={open} />}
+
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>

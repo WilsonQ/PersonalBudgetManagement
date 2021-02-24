@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import AppRouter from "./routes";
+import AppRouter from "./routes/index";
 
 ReactDOM.render(<AppRouter />, document.querySelector("#root"));
 
