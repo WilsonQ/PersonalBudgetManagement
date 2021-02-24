@@ -1,13 +1,24 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
-import { Dashboard as DashboardView } from "./views";
+import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
+import { createBrowserHistory } from "history";
+import Dashboard from "./views/Dashboard/dashboardView";
+import Global from "./components/global/global";
+import NewOperation from "./views/Operation/NewOperationView";
+import Operation from "./views/Operation/OperationsView";
 
 const Routes = () => {
+  const browserHistory = createBrowserHistory();
   return (
     <>
-      <Switch>
-        <Route exact path="/" component={DashboardView} />
-      </Switch>
+      <Router history={browserHistory}>
+        <Global>
+          <Switch>
+            <Route path="/operations" children={<Operation />} />
+            <Route path="/operation/new" children={<NewOperation />} />
+            <Route exact path="/" children={<Dashboard />} />
+          </Switch>
+        </Global>
+      </Router>
     </>
   );
 };

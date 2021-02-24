@@ -1,13 +1,13 @@
 import { Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
-import Dashboard from "./views/Dashboard";
+import React from "React";
+import Dashboard from "./components/global/global";
+import AppRouter from "./routes";
 export default function App() {
-  const browserHistory = createBrowserHistory();
   return (
     <>
-      <Router history={browserHistory}>
-        <Dashboard />
-      </Router>
+      {/* <Dashboard /> */}
+      <AppRouter />
     </>
   );
 }

@@ -5,16 +5,19 @@ import ListItemText from "@material-ui/core/ListItemText";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import CreateIcon from "@material-ui/icons/Create";
 import AssignmentIcon from "@material-ui/icons/Assignment";
+
+import { Link } from "react-router-dom";
+
 export const mainListItems = (
   <div>
-    <ListItem button>
+    <ListItem button component={Link} to="/">
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItem>
 
-    <ListItem button>
+    <ListItem button component={Link} to="/operations">
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
@@ -25,7 +28,7 @@ export const mainListItems = (
 
 export const secondaryListItems = (
   <div>
-    <ListItem button>
+    <ListItem button component={Link} to="/operation/new">
       <ListItemIcon>
         <CreateIcon />
       </ListItemIcon>

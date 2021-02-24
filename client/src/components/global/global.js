@@ -1,8 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+
+import Container from "@material-ui/core/Container";
 
 //import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -15,9 +17,9 @@ import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
-import { mainListItems, secondaryListItems } from "../../components/listItem";
-import AppBar from "../../components/AppBar";
-import Drawer from "../../components/Drawer";
+import { mainListItems, secondaryListItems } from "./listItem";
+import AppBar from "./AppBar";
+import Drawer from "./Drawer";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -98,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
 }));
-export default function Dashboard() {
+export default function Dashboard(props) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
@@ -115,6 +117,14 @@ export default function Dashboard() {
       <CssBaseline />
       <AppBar handleDrawerOpen={handleDrawerOpen} open={open} />
       <Drawer handleDrawerClose={handleDrawerClose} open={open} />
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
+          {React.Children.map(props.children, function (child) {
+            return React.cloneElement(child);
+          })}
+        </Container>
+      </main>
     </div>
   );
 }
