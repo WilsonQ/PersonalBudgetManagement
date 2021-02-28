@@ -1,0 +1,39 @@
+[33mcommit c776d45f226da109c903b4915072913e76a2b203[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: wilsonQ <wilson_quispe_05@hotmail.com>
+Date:   Wed Feb 24 20:53:07 2021 -0300
+
+    The login form, register and all the navigation routes have been implemented
+    
+    It was used to validate the react-hook-form forms and all fields are required. Private and public routes were also implemented, depending on whether you are logged in, you can access the private routes, othewise only the public ones.
+
+[33mcommit 2a39c0676101a524593180389bbb00ee2f5dae53[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: wilsonQ <wilson_quispe_05@hotmail.com>
+Date:   Wed Feb 24 08:57:16 2021 -0300
+
+    feat: add react-router
+    
+    All navigation route structures have been implemented
+
+[33mcommit eee192d26368fa62d43d3e70cecc21fffbfd4b5a[m
+Author: wilsonQ <wilson_quispe_05@hotmail.com>
+Date:   Tue Feb 23 17:18:55 2021 -0300
+
+    feat:Add Sidebar and Navbar
+    
+    The Sidebar with its corresponding pages was added. Which would be Dashboard, Operations and new operation. A Navbar was also added that is the title and the login (it needs to be implemented
+
+[33mcommit 7770f5cee9f260dc31341d8b7aeac20490691885[m
+Author: wilsonQ <wilson_quispe_05@hotmail.com>
+Date:   Fri Feb 19 18:24:40 2021 -0300
+
+    dosc: Project README added
+    
+    We start with a small description of the project
+
+[33mcommit 84888f2ebffba9e960dc1ab2688d6f69a6335a1b[m
+Author: wilsonQ <wilson_quispe_05@hotmail.com>
+Date:   Fri Feb 19 18:08:16 2021 -0300
+
+    feat: Backend and frontend project initialization
+    
+    Base proyect on the backend with node, express, nodemon, mysql and body-parse. In frontend initialization of a react proyect.

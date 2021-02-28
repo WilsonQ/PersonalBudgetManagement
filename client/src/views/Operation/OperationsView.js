@@ -1,9 +1,10 @@
 import React from "react";
+import TableOperations from "../../components/ListOperations";
 
 function operations() {
   return (
     <div>
-      <h1>Operations</h1>
+      <TableOperations />
     </div>
   );
 }

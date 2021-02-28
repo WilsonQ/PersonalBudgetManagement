@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -8,8 +8,9 @@ import Container from "@material-ui/core/Container";
 
 import AppBar from "./AppBar";
 import Drawer from "./Drawer";
+import { Link, useLocation, useHistory } from "react-router-dom";
 
-import { isAuthenticated } from "../../service/auth/authentication";
+import { isAuthenticated, setIsAuth } from "../../service/auth/authentication";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -94,13 +95,26 @@ export default function Dashboard(props) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [login, setLogin] = useState(isAuthenticated());
-
+  const history = useHistory();
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  useEffect(() => {
+    setLogin(isAuthenticated());
+    console.log("renderizar");
+    return () => {};
+  }, [login, setLogin]);
+
+  const handleLogout = () => {
+    console.log("global", !login, isAuthenticated());
+    setLogin(!login);
+    console.log("que pasa men", login);
+    setIsAuth(!login);
   };
 
   return (
@@ -111,8 +125,8 @@ export default function Dashboard(props) {
       si esta logeado tiene que mostra el drawer y un boton de logout */}
 
       <AppBar
+        handleLogout={handleLogout}
         login={login}
-        setLogin={setLogin}
         handleDrawerOpen={handleDrawerOpen}
         open={open}
       />

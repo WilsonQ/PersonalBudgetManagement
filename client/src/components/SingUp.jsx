@@ -13,6 +13,8 @@ import PersonPinIcon from "@material-ui/icons/PersonPin";
 
 import { useForm } from "react-hook-form";
 
+import { registerUser } from "../service/auth/authentication";
+import { useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(2),
@@ -40,11 +42,16 @@ export default function SignUp() {
   const [confirm, setConfirm] = useState(false);
   const [name, setName] = useState("nadie");
   const password = useRef({});
+  const history = useHistory();
   password.current = watch("password", "");
 
-  const onSubmit = (data, e) => {
+  const onSubmit = async (data, e) => {
     console.log(data);
+    let status = await registerUser(data);
 
+    if (status === 200) {
+      history.push("/login");
+    }
     e.target.reset();
   };
 
@@ -52,7 +59,7 @@ export default function SignUp() {
     setData({ ...data, [event.target.name]: event.target.value });
     setConfirm(false);
 
-    if (event.target.name === "firstName") {
+    if (event.target.name === "name") {
       setName(event.target.value);
     }
   }
@@ -74,7 +81,7 @@ export default function SignUp() {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                error={errors.firstName !== undefined}
+                error={errors.name !== undefined}
                 onChange={handleChange}
                 inputRef={register({
                   required: "You must provide a name.",
@@ -88,21 +95,21 @@ export default function SignUp() {
                   },
                 })}
                 autoComplete="fname"
-                name="firstName"
+                name="name"
                 variant="outlined"
                 required
                 fullWidth
-                id="firstName"
+                id="name"
                 label="First Name"
                 autoFocus
                 helperText={
-                  errors.firstName !== undefined ? errors.firstName.message : ""
+                  errors.name !== undefined ? errors.name.message : ""
                 }
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                error={errors.lastName !== undefined}
+                error={errors.surname !== undefined}
                 onChange={handleChange}
                 inputRef={register({
                   required: "You must provide last name.",
@@ -118,12 +125,12 @@ export default function SignUp() {
                 variant="outlined"
                 required
                 fullWidth
-                id="lastName"
+                id="surname"
                 label="Last Name"
-                name="lastName"
+                name="surname"
                 autoComplete="lname"
                 helperText={
-                  errors.lastName !== undefined ? errors.lastName.message : ""
+                  errors.surname !== undefined ? errors.surname.message : ""
                 }
               />
             </Grid>

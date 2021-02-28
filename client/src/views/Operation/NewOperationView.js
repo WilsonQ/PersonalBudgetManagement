@@ -1,9 +1,10 @@
 import React from "react";
+import Operation from "../../components/Operation.jsx";
 
 function newOperation() {
   return (
     <div>
-      <h1>New Operation</h1>
+      <Operation />
     </div>
   );
 }

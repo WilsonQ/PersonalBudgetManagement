@@ -6,6 +6,7 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import CreateIcon from "@material-ui/icons/Create";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import PersonIcon from "@material-ui/icons/Person";
+import CategoryDialog from "../CategoryDialog";
 
 import { Link } from "react-router-dom";
 
@@ -42,5 +43,6 @@ export const secondaryListItems = (
       </ListItemIcon>
       <ListItemText primary="New Operations" />
     </ListItem>
+    <CategoryDialog />
   </div>
 );

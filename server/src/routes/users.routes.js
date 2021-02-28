@@ -5,7 +5,7 @@ import {
   userRegister,
   createUser,
   postLogin,
-  getDashboard,
+  getUser,
   logout,
 } from "../controllers/users.controller";
 
@@ -16,7 +16,7 @@ router.get("/api/users/login", checkAuthenticated, userLogin);
 router.post("/api/users/register", checkAuthenticated, createUser);
 router.post("/api/users/login", checkAuthenticated, postLogin);
 router.get("/api/users/logout", logout);
-router.get("/api/users/dashboard", checkNotAuthenticated, getDashboard);
+router.get("/api/users/data", checkAuthenticated, getUser);
 
 function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {

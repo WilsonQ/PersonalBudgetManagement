@@ -12,6 +12,10 @@ import PersonPinIcon from "@material-ui/icons/PersonPin";
 
 import { useForm } from "react-hook-form";
 
+import { loginUser, setIsAuth } from "../service/auth/authentication";
+
+import { useHistory } from "react-router-dom";
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(2),
@@ -36,10 +40,16 @@ export default function SignIn() {
   const classes = useStyles();
   const { register, errors, handleSubmit, watch } = useForm();
   const [data, setData] = useState({});
+  const history = useHistory();
 
-  const onSubmit = (data, e) => {
+  const onSubmit = async (data, e) => {
     console.log(data);
+    let status = await loginUser(data);
 
+    if (status === 200) {
+      setIsAuth(true);
+      history.push("/dashboard");
+    }
     e.target.reset();
   };
 

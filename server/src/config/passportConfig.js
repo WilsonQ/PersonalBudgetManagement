@@ -2,6 +2,8 @@ import { pool } from "./connectionDatabase";
 import bcrypt from "bcrypt";
 import passportLocal from "passport-local";
 const LocalStrategy = passportLocal.Strategy;
+//provisorio
+import { setUser } from "./provisorio";
 
 function initialize(passport) {
   console.log("Initialized");
@@ -14,6 +16,8 @@ function initialize(passport) {
 
     if (results.rows.length > 0) {
       const user = results.rows[0];
+      setUser(user);
+
       //console.log(results.rows);
       try {
         const isMatch = await bcrypt.compare(password, user.password);

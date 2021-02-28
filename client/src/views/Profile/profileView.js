@@ -1,5 +1,4 @@
 import React from "react";
-
 function profileView() {
   return (
     <div>

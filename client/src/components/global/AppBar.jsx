@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -6,13 +6,16 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Typography from "@material-ui/core/Typography";
 
-import { Link } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
+
+import { isAuthenticated, setIsAuth } from "../../service/auth/authentication";
 
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 
 import AccessLogin from "./AccessLogin";
 const drawerWidth = 240;
+
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
@@ -44,12 +47,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AppBarComp({
+  login,
+  handleLogout,
   handleDrawerOpen,
   open,
-  login,
-  setLogin,
 }) {
   const classes = useStyles();
+  const [logins, setLogin] = useState(isAuthenticated());
+  const history = useHistory();
+
+  // const handleLogout = () => {
+  //   console.log(login);
+  //   setLogin(!login);
+  //   setIsAuth(login);
+  //   history.push("/");
+  // };
+
   return (
     <AppBar
       position="absolute"
@@ -82,7 +95,7 @@ export default function AppBarComp({
           </Link>
         </Typography>
 
-        <AccessLogin login={login} setLogin={setLogin} />
+        <AccessLogin login={login} setLogin={handleLogout} />
       </Toolbar>
     </AppBar>
   );

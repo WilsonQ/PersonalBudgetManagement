@@ -6,10 +6,11 @@ import bcrypt from "bcrypt";
 export const userRegister = async (req, res) => {
   await res.send("register");
 };
-export const userLogin = async (req, res) => {
-  await res.send("login");
+export const userLogin = (req, res) => {
+  res.status(200).json({ message: "success", user: req.user });
 };
-export const getDashboard = async (req, res) => {
+export const getUser = async (req, res) => {
+  console.log("que pasa men", req.user);
   res.status(200).json({ message: "success", user: req.user });
 };
 export const logout = (req, res) => {
@@ -28,23 +29,17 @@ export const logout = (req, res) => {
   //   .json({ message: "success", bodyMessage: "You have logged out" });
 };
 export const postLogin = passport.authenticate("local", {
-  successRedirect: "/api/users/dashboard",
+  successRedirect: "/api/users/data",
   failureRedirect: "/api/users/login",
   failureFlash: true,
   session: true,
 });
 export const createUser = async (req, res) => {
-  const { name, email, password, password2 } = req.body;
-  console.log(
-    "~ createUser ~ name, email, password, password2",
-    name,
-    email,
-    password,
-    password2
-  );
+  const { name, surname, email, password, password2 } = req.body;
+  console.log("que trae el body", req.body);
   let errors = [];
 
-  if (!name || !email || !password || !password2) {
+  if (!name || !surname || !email || !password || !password2) {
     errors.push({ message: "Please enter all fields" });
   }
   if (password.length < 6) {
@@ -56,6 +51,7 @@ export const createUser = async (req, res) => {
 
   if (errors.length > 0) {
     console.table(errors);
+    res.status(400).json(errors);
   } else {
     //form validation has passed
     let hashedPassword = await bcrypt.hash(password, 10);
@@ -68,14 +64,14 @@ export const createUser = async (req, res) => {
     console.log(resp.rows);
     if (resp.rows.length > 0) {
       errors.push({ message: "Email already Registered" });
-      console.table(errors);
+      res.status(400).json(errors);
     } else {
       const response = await pool.query(
-        "INSERT INTO users (name,email,password) VALUES ($1,$2,$3) RETURNING user_id,password",
-        [name, email, hashedPassword]
+        "INSERT INTO users (name,surname,email,password) VALUES ($1,$2,$3,$4) RETURNING user_id,password",
+        [name, surname, email, hashedPassword]
       );
       console.log(response.rows);
-      res.json({
+      res.status(200).json({
         message: ["Success", "You are now registered. Please log in"],
       });
     }
