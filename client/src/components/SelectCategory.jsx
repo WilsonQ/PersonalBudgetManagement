@@ -22,7 +22,7 @@ const theme = createMuiTheme({
 
 export default function RadioButtonsGroup() {
   const [value, setValue] = React.useState("all");
-  const valor = useContext(AppContext);
+  /* const valor = useContext(AppContext); */
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -31,9 +31,9 @@ export default function RadioButtonsGroup() {
       event.target.value
     );
 
-    valor.setState({ type: event.target.value });
+    /*  valor.setState({ type: event.target.value });
 
-    console.log(valor.state.type);
+    console.log(valor.state.type); */
     //setState({ type: event.target.value });
   };
 
@@ -56,14 +56,14 @@ export default function RadioButtonsGroup() {
             label="All"
           />
           <FormControlLabel
-            value="ingreso"
+            value="income"
             control={<Radio color="primary" />}
-            label="Ingreso"
+            label="Income"
           />
           <FormControlLabel
-            value="egreso"
+            value="expenses"
             control={<Radio color="secondary" />}
-            label="Egreso"
+            label="Expenses"
           />
         </RadioGroup>
       </FormControl>

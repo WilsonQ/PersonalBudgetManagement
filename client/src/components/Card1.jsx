@@ -15,12 +15,14 @@ import Box from "@material-ui/core/Box";
 import { Avatar, IconButton, CardMedia } from "@material-ui/core";
 import ActionOperations from "./ActionOperations";
 import MoreIcon from "@material-ui/icons/MoreVert";
-
+import TabCategories from "./TabCategories";
 const useStyles = makeStyles((theme) => ({
   root: {
     borderRadius: 12,
     minWidth: 256,
     textAlign: "center",
+    boxShadow: "0 1px 3px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.24)",
+    transition: "all 0.3s cubic-bezier(.25,.8,.25,1)",
   },
   header: {
     textAlign: "start",
@@ -42,41 +44,46 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const PricingCardDemo = React.memo(function PricingCard(props) {
-  const { avatarUrl, title, price, description, imageUrl } = props;
-  //const [state, setState] = useContext(AppContext);
-
-  let type = false;
+  const {
+    operation_id,
+    operation_date,
+    concept,
+    amount,
+    type,
+    category,
+  } = props;
 
   const classes = useStyles();
   return (
-    <Card className={classes.root}>
+    <Card boxShadow={3} key={operation_id} className={classes.root}>
       <CardHeader
-        title={title}
+        title={concept}
         className={classes.header}
-        subheader="26/02/2021"
-        action={<ActionOperations />}
+        subheader={operation_date}
+        action={<ActionOperations operationUpdate={props} />}
       />
       <Divider variant="middle" />
       <CardContent>
         <Typography className={classes.subtitle} variant="h3" align="center">
-          {price}
+          ${amount}
         </Typography>
         <div className={classes.list}>
-          <Typography
-            style={{
-              color: type ? "#FF9800" : "#4CAF50",
-            }}
-            variant="h4"
-            component="h4"
-          >
-            {description}
+          <Typography variant="h4" component="h4">
+            {type}
           </Typography>
         </div>
       </CardContent>
-      <Divider variant="middle" />
-      <Box pt={1} pb={1}>
-        <Chip />
-      </Box>
+      {category && (
+        <>
+          <Divider variant="middle" />
+          <Box pt={1} pb={1}>
+            {/*  {category.map((cat) => (
+              <Chip key={cat.category_id} categories={cat} />
+            ))} */}
+            <TabCategories categories={category} />
+          </Box>
+        </>
+      )}
     </Card>
   );
 });

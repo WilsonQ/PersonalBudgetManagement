@@ -13,6 +13,7 @@ import PersonPinIcon from "@material-ui/icons/PersonPin";
 import { useForm } from "react-hook-form";
 
 import { loginUser, setIsAuth } from "../service/auth/authentication";
+import { AuthContext } from "../routes/index";
 
 import { useHistory } from "react-router-dom";
 
@@ -37,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn() {
+  const { state: authState } = React.useContext(AuthContext);
   const classes = useStyles();
   const { register, errors, handleSubmit, watch } = useForm();
   const [data, setData] = useState({});

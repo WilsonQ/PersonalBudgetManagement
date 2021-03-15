@@ -2,10 +2,6 @@ import React, { useState, forwardRef, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItem from "@material-ui/core/ListItem";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -13,15 +9,17 @@ import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 
-import DeleteIcon from "@material-ui/icons/Delete";
 import Tooltip from "@material-ui/core/Tooltip";
 
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import EditIcon from "@material-ui/icons/Edit";
 import moment from "moment";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import MuiAutoComplete from "./muiAutoComplete";
+
+import { updateOperation } from "../service/api/apiBackend";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -53,13 +51,13 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function FullScreenDialog() {
+export default function FullScreenDialog({ operation }) {
   const classes = useStyles();
   const [openDialog, setOpenDialog] = useState(false);
   const autoC = useRef(null);
-  const { register, errors, handleSubmit, control } = useForm();
-  const [value, setValue] = useState(null);
-  const [categories, setCategories] = React.useState([]);
+  const { operation_date, concept, amount, operation_id, category } = operation;
+  const { register, errors, handleSubmit } = useForm();
+  const [categories, setCategories] = React.useState(category || []);
 
   const [dataSubmit, setDataSubmit] = useState({});
   // eslint-disable-next-line no-unused-vars
@@ -69,11 +67,12 @@ export default function FullScreenDialog() {
 
   const onSubmit = (data, e) => {
     data.category = categories;
-
+    data.operation_id = operation_id;
     console.log(data, dataSubmit);
+    updateOperation(data);
     e.target.reset();
     const ele = autoC.current.getElementsByClassName(
-      "MuiAutocomplete-clearIndicator"
+      "MuiAutocomplete-clearIndcator"
     )[0];
     if (ele) ele.click();
   };
@@ -91,9 +90,9 @@ export default function FullScreenDialog() {
 
   return (
     <div>
-      <Tooltip title="Delete">
-        <IconButton onClick={handleClickOpenDialog} aria-label="delete">
-          <DeleteIcon />
+      <Tooltip title="Update">
+        <IconButton onClick={handleClickOpenDialog} aria-label="update">
+          <EditIcon />
         </IconButton>
       </Tooltip>
       <Dialog
@@ -113,11 +112,11 @@ export default function FullScreenDialog() {
               <CloseIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-              Sound
+              Update Operation
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              save
-            </Button>
+            {/* <Button autoFocus color="inherit" onClick={handleClose}>
+              Update
+            </Button> */}
           </Toolbar>
         </AppBar>
         <div className={classes.root}>
@@ -130,6 +129,7 @@ export default function FullScreenDialog() {
               <TextField
                 error={errors.concept !== undefined}
                 onChange={handleChangeSubmit}
+                defaultValue={concept}
                 inputRef={register({
                   required: "You must provide a concept.",
                   pattern: {
@@ -159,6 +159,7 @@ export default function FullScreenDialog() {
               <TextField
                 error={errors.amount !== undefined}
                 onChange={handleChangeSubmit}
+                defaultValue={amount}
                 inputRef={register({
                   required: "You must provide a amount.",
                   pattern: {
@@ -187,12 +188,12 @@ export default function FullScreenDialog() {
                 }
               />
               <TextField
-                error={errors.date !== undefined}
+                error={errors.operation_datee !== undefined}
                 id="date"
                 label="Date"
+                defaultValue={operation_date}
                 type="date"
-                name="date"
-                defaultValue={dateToday}
+                name="operation_date"
                 onChange={handleChangeSubmit}
                 inputRef={register({
                   required: "You must provide a date.",
@@ -208,7 +209,9 @@ export default function FullScreenDialog() {
                   shrink: true,
                 }}
                 helperText={
-                  errors.date !== undefined ? errors.date.message : ""
+                  errors.operation_date !== undefined
+                    ? errors.operation_date.message
+                    : ""
                 }
               />
               <MuiAutoComplete
@@ -224,7 +227,7 @@ export default function FullScreenDialog() {
                 variant="contained"
                 color="primary"
               >
-                Sign Up
+                Update
               </Button>
             </form>
           </div>

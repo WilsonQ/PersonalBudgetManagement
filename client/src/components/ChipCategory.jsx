@@ -17,9 +17,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SmallOutlinedChips() {
+export default function SmallOutlinedChips({ categories }) {
   const classes = useStyles();
-
+  const { category_id, category, available } = categories;
   const handleDelete = () => {
     console.info("You clicked the delete icon.");
   };
@@ -34,17 +34,7 @@ export default function SmallOutlinedChips() {
         variant="outlined"
         size="small"
         icon={<CategoryIcon />}
-        label="Primary "
-        clickable
-        color="primary"
-        onDelete={handleDelete}
-        deleteIcon={<DoneIcon />}
-      />
-      <Chip
-        variant="outlined"
-        size="small"
-        icon={<CategoryIcon />}
-        label="clickable"
+        label={category}
         clickable
         color="primary"
         onDelete={handleDelete}

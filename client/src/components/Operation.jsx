@@ -5,21 +5,20 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
 import moment from "moment";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
-import Categories from "./CategoryOperation";
 import MuiAutoComplete from "./muiAutoComplete";
 
 import { createOperation } from "../service/api/apiBackend";
 
 const currencies = [
   {
-    value: "Ingreso",
-    label: "$-Ingreso",
+    value: "income",
+    label: "Income",
   },
   {
-    value: "Egreso",
-    label: "€-Egreso",
+    value: "expenses",
+    label: "Expenses",
   },
 ];
 
@@ -205,7 +204,7 @@ export default function LayoutTextFields() {
             variant="contained"
             color="primary"
           >
-            Sign Up
+            Create Operation
           </Button>
         </form>
       </div>

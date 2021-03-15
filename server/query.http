@@ -1,0 +1,47 @@
+POST http://localhost:3001/api/users/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "pedro@gmail.com",
+    "password": "pedro05"
+}
+
+GET  http://localhost:3001/api/operations HTTP/1.1
+content-type: application/json
+
+GET  http://localhost:3001/api/operations/search/pared HTTP/1.1
+content-type: application/json
+
+
+GET  http://localhost:3001/api/users/logout HTTP/1.1
+content-type: application/json
+
+
+POST http://localhost:3001/api/users/register HTTP/1.1
+content-type: application/json
+
+{
+    "name": "pedro",
+    "surname": "soypedro",
+    "email": "pedro@gmail.com",
+    "password": "pedro05",
+    "password2": "pedro05"
+}
+
+
+POST http://localhost:3001/api/operations HTTP/1.1
+content-type: application/json
+
+ {
+  "concept": "cena",
+  "amount": "4000",
+  "operation_date": "2012-02-26",
+  "type": "egresa",
+  "category": [
+    { "category": "no pe", "availa": "1994" },
+    { "category": "albanileris", "year": "1972" }
+  ]
+}
+
+DELETE http://localhost:3001/api/operations/11 HTTP/1.1
+content-type: application/json

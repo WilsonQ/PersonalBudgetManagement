@@ -28,12 +28,45 @@ export const logout = (req, res) => {
   //   .status(200)
   //   .json({ message: "success", bodyMessage: "You have logged out" });
 };
-export const postLogin = passport.authenticate("local", {
+/* passport.authenticate("local", {
   successRedirect: "/api/users/data",
   failureRedirect: "/api/users/login",
   failureFlash: true,
   session: true,
-});
+}); */
+export const postLogin = (req, res, next) => {
+  passport.authenticate(
+    "local",
+    {
+      successRedirect: "/api/users/data",
+      failureRedirect: "/api/users/login",
+      failureFlash: true,
+      session: true,
+    },
+    (err, user, info) => {
+      console.log("-----> info,req", info, req.body);
+      if (err) {
+        return res.status(400).json({ errors: err });
+      }
+      if (!user) {
+        return res.status(400).json({ errors: info });
+      } else {
+        console.log(user.id);
+        req.login(user, (err) => {
+          if (err) {
+            throw err;
+          }
+        });
+        return res.status(200).json({
+          success: true,
+          message: `Welcome back ${user.name}`,
+          user: user,
+        });
+      }
+    }
+  )(req, res, next);
+};
+
 export const createUser = async (req, res) => {
   const { name, surname, email, password, password2 } = req.body;
   console.log("que trae el body", req.body);

@@ -1,5 +1,5 @@
 import axios from "axios";
-const state = { isAuth: true };
+const state = { isAuth: false };
 const query = "http://localhost:3001/api/";
 
 export const isAuthenticated = () => state.isAuth;

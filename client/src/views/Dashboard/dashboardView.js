@@ -22,7 +22,7 @@ export default function DashboardView() {
     <div>
       <h1>operations</h1>
       <div>
-        {operations && operations.map((operation) => operation.concept)}
+        {/* {operations && operations.map((operation) => operation.concept)} */}
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import OperationDialog from "./OperationDialog";
 import OperationDialogRemove from "./OperationDialogRemove";
 
-export default function SimpleMenu() {
+export default function SimpleMenu({ operationUpdate }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -37,10 +37,10 @@ export default function SimpleMenu() {
         onClose={handleClose}
       >
         <MenuItem style={{ padding: 1 }} onClick={handleClose}>
-          <OperationDialog />
+          <OperationDialog operation={operationUpdate} />
         </MenuItem>
         <MenuItem style={{ padding: 1 }} onClick={handleClose}>
-          <OperationDialogRemove />
+          <OperationDialogRemove removeId={operationUpdate.operation_id}/>
         </MenuItem>
       </Menu>
     </div>

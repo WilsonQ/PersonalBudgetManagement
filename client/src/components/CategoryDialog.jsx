@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
@@ -22,29 +22,15 @@ import EditIcon from "@material-ui/icons/Edit";
 import DoneIcon from "@material-ui/icons/Done";
 import InputBase from "@material-ui/core/InputBase";
 import Divider from "@material-ui/core/Divider";
-
-import SearchIcon from "@material-ui/icons/Search";
+import CheckIcon from "@material-ui/icons/Check";
+import CloseIcon from "@material-ui/icons/Close";
+import AddIcon from "@material-ui/icons/Add";
 
 import IconButton from "@material-ui/core/IconButton";
 
-import Update from "./updateChip";
+import InputBaseDebounce from "./InputBaseDebounce";
+import { getCategories, createCategory } from "../service/api/apiBackend";
 
-const options = [
-  "None",
-  "Atria",
-  "Callisto",
-  "Dione",
-  "Ganymede",
-  "Hangouts Call",
-  "Luna",
-  "Oberon",
-  "Phobos",
-  "Pyxis",
-  "Sedna",
-  "Titania",
-  "Triton",
-  "Umbriel",
-];
 const useStyles2 = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -76,15 +62,13 @@ function ConfirmationDialogRaw(props) {
   const classes = useStyles2();
   const { onClose, value: valueProp, open, ...other } = props;
   const [value, setValue] = React.useState(valueProp);
+  const [create, setCreate] = React.useState(false);
+  const [reRender, setReRender] = React.useState(false);
   const radioGroupRef = React.useRef(null);
-  const deleteCategory = useRef({});
-  const [chipData, setChipData] = React.useState([
-    { key: 0, label: "Angular" },
-    { key: 1, label: "jQuery" },
-    { key: 2, label: "Polymer" },
-    { key: 3, label: "React" },
-    { key: 4, label: "Vue.js" },
-  ]);
+  const [categoriesData, setCategoriesData] = useState([]);
+  let refs = useRef([React.createRef(), React.createRef()]);
+  let categoryRef = useRef(null);
+  let btnRef = useRef(React.createRef());
 
   React.useEffect(() => {
     if (!open) {
@@ -97,24 +81,70 @@ function ConfirmationDialogRaw(props) {
       radioGroupRef.current.focus();
     }
   };
+  useEffect(() => {
+    if (create) {
+      console.log("focus", categoryRef.current.children[0], create);
+      categoryRef.current.children[0].focus();
+    } else {
+      if (categoryRef.current != null) {
+        categoryRef.current.children[0].value = "";
+      }
+    }
+  }, [create]);
 
   const handleCancel = () => {
     onClose();
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.table("new category", categoryRef.current.children[0].value);
+    let category = { category: categoryRef.current.children[0].value };
+    let resp = await createCategory(category);
+    console.log("que retorna", resp);
+    if (resp === 200) {
+      categoryRef.current.children[0].value = "";
+      setReRender(true);
+    }
   };
 
   const handleOk = () => {
     onClose(value);
   };
+  const handleBlur = (e) => {
+    console.log(e);
+    console.log("ref", btnRef.current);
+    console.log("ref", window.event);
+    setCreate(false);
+  };
 
-  const handleChange = (data) => {
-    console.log(data);
-    console.log("click", deleteCategory.current);
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit(e);
+    }
   };
-  const handleDelete = (chipToDelete) => () => {
-    setChipData((chips) =>
-      chips.filter((chip) => chip.key !== chipToDelete.key)
-    );
+
+  const handleUpdate = (i) => {
+    console.table("on focus", refs.current);
+    console.log("que viene en", refs.current);
+    refs.current[i].current.children[0].focus();
   };
+
+  useEffect(() => {
+    console.log("Empezando el get");
+    async function getData() {
+      console.log("Buscando Categorias");
+      const dataResponse = await getCategories();
+      setCategoriesData(dataResponse.data);
+      console.log("tengo las categorias ", dataResponse);
+      await updateLength(dataResponse.data);
+    }
+    const updateLength = (categoriesData) => {
+      for (let index = 0; index < categoriesData.length; index++) {
+        refs.current[index] = refs.current[index] || React.createRef();
+      }
+    };
+    getData();
+  }, [reRender]);
 
   return (
     <Dialog
@@ -128,41 +158,45 @@ function ConfirmationDialogRaw(props) {
     >
       <DialogTitle id="confirmation-dialog-title">
         <div className={classes.root}>
+          {create && (
+            <IconButton
+              ref={btnRef}
+              onClick={handleSubmit}
+              className={classes.iconButton}
+              aria-label="save"
+            >
+              <CheckIcon />
+            </IconButton>
+          )}
+
           <InputBase
+            ref={categoryRef}
+            onBlur={handleBlur}
+            onClick={() => setCreate(true)}
             className={classes.input}
-            placeholder="Search Google Maps"
-            inputProps={{ "aria-label": "search google maps" }}
+            placeholder="Add new category"
+            inputProps={{ "aria-label": "add new category" }}
+            onKeyDown={handleKeyDown}
           />
           <IconButton
-            type="submit"
             className={classes.iconButton}
-            aria-label="search"
+            aria-label="create"
+            onClick={() => setCreate(!create)}
           >
-            <SearchIcon />
+            {!create ? <AddIcon /> : <CloseIcon />}
           </IconButton>
         </div>
       </DialogTitle>
       <DialogContent dividers>
-        {chipData.map((data) => {
+        {categoriesData.map((data, i) => {
           return (
-            <div className={classes.root} key={data.key}>
-              <IconButton className={classes.iconButton} aria-label="menu">
-                <DeleteIcon onClick={handleDelete(data)} fontSize="small" />
-              </IconButton>
-              <InputBase
-                className={classes.input}
-                placeholder="Search Google Maps"
-                inputProps={{ "aria-label": "search google maps" }}
-                value={data.label}
+            <div className={classes.root} key={data.category_id}>
+              <InputBaseDebounce
+                index={i}
+                focus={handleUpdate}
+                refs={refs}
+                data={data}
               />
-
-              <IconButton
-                color="primary"
-                className={classes.iconButton}
-                aria-label="directions"
-              >
-                <EditIcon />
-              </IconButton>
             </div>
           );
         })}

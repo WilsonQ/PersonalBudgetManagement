@@ -4,12 +4,17 @@ import cors from "cors";
 import session from "express-session";
 import flash from "express-flash";
 import passport from "passport";
+/* const pgSession = require("connect-pg-simple")(session); */
+import pgSession from "connect-pg-simple";
+
+const pgs = pgSession(session);
+import { pool } from "./config/connectionDatabase";
 
 import homeRoute from "./routes/dashboard.routes";
 import operationRoute from "./routes/operations.routes";
 import usersRoute from "./routes/users.routes";
 import initializePassport from "./config/passportConfig";
-
+/* const pgs = pgSession(session); */
 const app = express();
 
 const PORT = process.env.PORT || 3001;
@@ -30,6 +35,9 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: { user_id: 1 },
+    store: new pgs({
+      pool: pool, // Connection pool
+    }),
   })
 );
 app.use(passport.initialize());
